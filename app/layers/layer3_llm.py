@@ -1,5 +1,6 @@
 import os
 import json
+import time
 from groq import Groq
 from dotenv import load_dotenv
 from app.models import PIIFinding, DetectionSource
@@ -42,6 +43,9 @@ If nothing sensitive found, return exactly: {"findings": []}"""
 
 
 def detect(text: str) -> list[PIIFinding]:
+    # Rate limiting — keeps us under Groq's 30 requests/minute free tier limit
+    time.sleep(2)
+
     try:
         response = _client.chat.completions.create(
             model="llama-3.3-70b-versatile",
@@ -76,7 +80,13 @@ def detect(text: str) -> list[PIIFinding]:
         return findings
 
     except json.JSONDecodeError:
+        # Model returned malformed JSON — skip silently
         return []
     except Exception as e:
-        print(f"  [Layer 3 error: {e}]")
+        error_msg = str(e)
+        if "429" in error_msg or "rate_limit" in error_msg.lower():
+            print("  [Layer 3 skipped: rate limit hit — waiting]")
+            time.sleep(60)  # wait 60 seconds then give up on this chunk
+        else:
+            print(f"  [Layer 3 error: {e}]")
         return []
