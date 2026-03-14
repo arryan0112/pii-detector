@@ -1,13 +1,12 @@
 import os
 import json
-import google.generativeai as genai
+from groq import Groq
 from dotenv import load_dotenv
 from app.models import PIIFinding, DetectionSource
 
 load_dotenv()
 
-genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
-_model = genai.GenerativeModel("gemini-1.5-flash")
+_client = Groq(api_key=os.getenv("GROQ_API_KEY"))
 
 SYSTEM_PROMPT = """You are a data security analyst for Indian enterprises.
 Your job is to find sensitive information that regex and NER models CANNOT detect.
@@ -24,7 +23,7 @@ Focus ONLY on these categories that pattern matching misses:
 - sensitive_personal: caste, religion, political views tied to a person
   Example: "the Dalit employee in accounts was denied the promotion"
 
-DO NOT flag things that regex already catches: emails, phone numbers, PAN, Aadhaar.
+DO NOT flag things regex already catches: emails, phone numbers, PAN, Aadhaar.
 DO NOT flag generic statements not tied to any individual.
 
 Return ONLY valid JSON, no explanation, no markdown, no code blocks:
@@ -33,7 +32,7 @@ Return ONLY valid JSON, no explanation, no markdown, no code blocks:
     {
       "text_span": "exact quote from input",
       "entity_type": "implied_identity|contextual_PHI|insider_risk|business_secret|sensitive_personal",
-      "confidence": 0.0,
+      "confidence": 0.95,
       "reasoning": "one sentence why this is sensitive"
     }
   ]
@@ -43,15 +42,22 @@ If nothing sensitive found, return exactly: {"findings": []}"""
 
 
 def detect(text: str) -> list[PIIFinding]:
-    prompt = f"{SYSTEM_PROMPT}\n\nAnalyze this text:\n\n{text}"
-
     try:
-        response = _model.generate_content(prompt)
-        raw = response.text.strip()
+        response = _client.chat.completions.create(
+            model="llama-3.3-70b-versatile",
+            messages=[
+                {"role": "system", "content": SYSTEM_PROMPT},
+                {"role": "user", "content": f"Analyze this text:\n\n{text}"}
+            ],
+            temperature=0.1
+        )
 
-        # Strip markdown fences if Gemini adds them
+        raw = response.choices[0].message.content.strip()
+
+        # Strip markdown fences if model adds them
         if raw.startswith("```"):
-            raw = raw.split("```")[1]
+            parts = raw.split("```")
+            raw = parts[1] if len(parts) > 1 else raw
             if raw.startswith("json"):
                 raw = raw[4:]
             raw = raw.strip()
@@ -70,7 +76,7 @@ def detect(text: str) -> list[PIIFinding]:
         return findings
 
     except json.JSONDecodeError:
-        # Gemini occasionally returns malformed JSON — fail silently
         return []
-    except Exception:
+    except Exception as e:
+        print(f"  [Layer 3 error: {e}]")
         return []
