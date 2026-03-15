@@ -24,14 +24,20 @@ def _deduplicate(findings: list[PIIFinding]) -> list[PIIFinding]:
     return kept
 
 
+
 def _filter_noise(findings: list[PIIFinding]) -> list[PIIFinding]:
     """Remove low-value findings that add noise."""
-    noise_words = {"age", "the", "a", "an", "is", "was", "date", "name"}
+    noise_words = {"age", "the", "a", "an", "is", "was", "date", "name", "aadhaar", "pan", "gstin"}
     filtered = []
     for f in findings:
+        # Skip very short spans
         if len(f.text_span.strip()) <= 2:
             continue
+        # Skip common noise words
         if f.text_span.lower().strip() in noise_words:
+            continue
+        # Skip low confidence NER findings — likely false positives
+        if f.source == DetectionSource.NER and f.confidence < 0.5:
             continue
         filtered.append(f)
     return filtered
