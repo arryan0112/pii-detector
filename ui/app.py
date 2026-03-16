@@ -11,6 +11,7 @@ st.set_page_config(
 
 st.title("Semantic PII Detector")
 st.caption("Three-layer detection for Indian enterprises — Regex + Transformer NER + LLM semantic reasoning")
+st.info("Note: API may take 30-60 seconds to wake up on first request if inactive. Please wait.")
 
 # ── Sidebar ───────────────────────────────────────────────────────────────────
 
@@ -72,7 +73,7 @@ with tab1:
                     response = httpx.post(
                         f"{API_URL}/analyze",
                         json={"text": text_input},
-                        timeout=60
+                        timeout=120
                     )
                     response.raise_for_status()
                     st.session_state["result"] = response.json()
@@ -98,7 +99,7 @@ with tab2:
                     response = httpx.post(
                         f"{API_URL}/analyze/upload",
                         files={"file": (uploaded.name, uploaded.read(), uploaded.type)},
-                        timeout=120
+                        timeout=300
                     )
                     response.raise_for_status()
                     st.session_state["result"] = response.json()
