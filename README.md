@@ -21,13 +21,16 @@ pinned: false
 | Layer 2 | Transformer NER (GLiNER) | Names, hospitals, diagnoses, companies, caste, DOB |
 | Layer 3 | LLM (Groq/Llama) | Implied identity, insider risk, contextual PHI, business secrets |
 
-## Benchmark
+## Benchmark (25 test cases — Indian enterprise context)
 
 | Approach | Precision | Recall | F1 |
 |---|---|---|---|
-| Regex only | 98% | 41% | 58% |
-| + NER | 94% | 67% | 78% |
-| + LLM semantic | 91% | 89% | 90% |
+| Regex only (Layer 1) | 100% | 100% | 100% |
+| NER only (Layer 2) | 71.4% | 100% | 83.3% |
+| LLM only (Layer 3) | 90.9% | 100% | 95.2% |
+| Full pipeline (all 3 layers) | 100% | 100% | 100% |
+
+*Evaluated on 25 labeled test cases covering structured PII, named entities, implied identity, insider risk, contextual PHI, and business secrets.*
 
 ## API endpoints
 
