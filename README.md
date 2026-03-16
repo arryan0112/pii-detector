@@ -15,7 +15,7 @@ pinned: false
 
 ## Live Demo
 - API docs: https://arryan-01-pii-detector.hf.space/docs
-- Demo UI: https://pii-detector-hqdczbuqtnekjgmf2sg4j.streamlit.app
+- Demo UI: https://pii-detector-jfua2lrrxmsgduaxq9v6w7.streamlit.app/
 
 ## What it detects
 
