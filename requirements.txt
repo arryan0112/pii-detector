@@ -1,0 +1,20 @@
+
+fastapi
+uvicorn[standard]
+pydantic
+python-multipart
+python-dotenv
+presidio-analyzer
+spacy==3.7.4
+en-core-web-lg @ https://github.com/explosion/spacy-models/releases/download/en_core_web_lg-3.7.0/en_core_web_lg-3.7.0-py3-none-any.whl
+gliner
+groq
+pypdf
+python-docx
+beautifulsoup4
+chardet
+httpx
+pytest
+reportlab
+google-genai
+openai
