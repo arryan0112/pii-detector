@@ -6,7 +6,13 @@ from app.models import PIIFinding, DetectionSource
 
 load_dotenv()
 
-_client = Groq(api_key=os.getenv("GROQ_API_KEY"))
+_api_key = os.getenv("GROQ_API_KEY")
+if not _api_key:
+    print("WARNING: GROQ_API_KEY not set — Layer 3 will return empty findings")
+else:
+    print(f"GROQ_API_KEY loaded — first 8 chars: {_api_key[:8]}...")
+
+_client = Groq(api_key=_api_key) if _api_key else None
 
 SYSTEM_PROMPT = """You are a data security analyst for Indian enterprises.
 Your job is to find sensitive information that regex and NER models CANNOT detect.
@@ -42,6 +48,10 @@ If nothing sensitive found, return exactly: {"findings": []}"""
 
 
 def detect(text: str) -> list[PIIFinding]:
+    if _client is None:
+        print("  [Layer 3 skipped: no API key]")
+        return []
+
     try:
         response = _client.chat.completions.create(
             model="llama-3.3-70b-versatile",
@@ -74,14 +84,19 @@ def detect(text: str) -> list[PIIFinding]:
                 confidence=float(f["confidence"]),
                 reasoning=f.get("reasoning")
             ))
+
+        print(f"  [Layer 3: found {len(findings)} findings]")
         return findings
 
-    except json.JSONDecodeError:
+    except json.JSONDecodeError as e:
+        print(f"  [Layer 3 JSON error: {e}]")
         return []
     except Exception as e:
         error_msg = str(e)
         if "429" in error_msg or "rate_limit" in error_msg.lower():
-            print("  [Layer 3 skipped: rate limit]")
+            print(f"  [Layer 3 skipped: rate limit — {error_msg[:100]}]")
+        elif "401" in error_msg or "auth" in error_msg.lower():
+            print(f"  [Layer 3 error: API key issue — {error_msg[:100]}]")
         else:
-            print(f"  [Layer 3 error: {e}]")
+            print(f"  [Layer 3 error: {error_msg[:200]}]")
         return []
