@@ -1,5 +1,8 @@
 ---
 title: Semantic PII Detector
+## Live Demo
+- API docs: https://arryan-01-pii-detector.hf.space/docs
+- Demo UI: https://pii-detector-hqdczb...streamlit.app
 emoji: 🔍
 colorFrom: blue
 colorTo: purple
