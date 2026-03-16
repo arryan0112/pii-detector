@@ -1,0 +1,180 @@
+[
+    {
+      "id": "tc_001",
+      "text": "Contact me at priya.sharma@gmail.com for the project details.",
+      "expected": [{"text_span": "priya.sharma@gmail.com", "entity_type": "EMAIL_ADDRESS"}],
+      "detectable_by": ["regex"]
+    },
+    {
+      "id": "tc_002",
+      "text": "My Aadhaar number is 2345 6789 0123.",
+      "expected": [{"text_span": "2345 6789 0123", "entity_type": "IN_AADHAAR"}],
+      "detectable_by": ["regex"]
+    },
+    {
+      "id": "tc_003",
+      "text": "PAN card: ABCDE1234F, IFSC: HDFC0001234",
+      "expected": [
+        {"text_span": "ABCDE1234F", "entity_type": "IN_PAN"},
+        {"text_span": "HDFC0001234", "entity_type": "IN_IFSC"}
+      ],
+      "detectable_by": ["regex"]
+    },
+    {
+      "id": "tc_004",
+      "text": "Call me at +91 98765 43210 or +91 87654 32109.",
+      "expected": [
+        {"text_span": "+91 98765 43210", "entity_type": "IN_PHONE"},
+        {"text_span": "+91 87654 32109", "entity_type": "IN_PHONE"}
+      ],
+      "detectable_by": ["regex"]
+    },
+    {
+      "id": "tc_005",
+      "text": "Payment via card 4532-1234-5678-9012.",
+      "expected": [{"text_span": "4532-1234-5678-9012", "entity_type": "CREDIT_CARD"}],
+      "detectable_by": ["regex"]
+    },
+    {
+      "id": "tc_006",
+      "text": "UPI: amit@okicici, bank IFSC SBIN0001234.",
+      "expected": [
+        {"text_span": "amit@okicici", "entity_type": "IN_UPI"},
+        {"text_span": "SBIN0001234", "entity_type": "IN_IFSC"}
+      ],
+      "detectable_by": ["regex"]
+    },
+    {
+      "id": "tc_007",
+      "text": "Vehicle registration KA 01 AB 1234 was flagged.",
+      "expected": [{"text_span": "KA 01 AB 1234", "entity_type": "IN_VEHICLE"}],
+      "detectable_by": ["regex"]
+    },
+    {
+      "id": "tc_008",
+      "text": "Dr. Rajesh Kumar from Apollo Hospital treated the patient.",
+      "expected": [
+        {"text_span": "Rajesh Kumar", "entity_type": "doctor name"},
+        {"text_span": "Apollo Hospital", "entity_type": "hospital name"}
+      ],
+      "detectable_by": ["ner"]
+    },
+    {
+      "id": "tc_009",
+      "text": "Patient Priya Sharma was diagnosed with Type 2 Diabetes.",
+      "expected": [
+        {"text_span": "Priya Sharma", "entity_type": "patient name"},
+        {"text_span": "Type 2 Diabetes", "entity_type": "medical condition"}
+      ],
+      "detectable_by": ["ner"]
+    },
+    {
+      "id": "tc_010",
+      "text": "Employee Amit Sharma joined Infosys with a salary of 12 LPA.",
+      "expected": [
+        {"text_span": "Amit Sharma", "entity_type": "employee name"},
+        {"text_span": "Infosys", "entity_type": "company name"},
+        {"text_span": "12 LPA", "entity_type": "salary information"}
+      ],
+      "detectable_by": ["ner"]
+    },
+    {
+      "id": "tc_011",
+      "text": "Deepa Nair, date of birth 22/07/1985, was admitted.",
+      "expected": [
+        {"text_span": "Deepa Nair", "entity_type": "patient name"},
+        {"text_span": "22/07/1985", "entity_type": "date of birth"}
+      ],
+      "detectable_by": ["ner"]
+    },
+    {
+      "id": "tc_012",
+      "text": "The Dalit engineer in accounts was denied the promotion.",
+      "expected": [{"text_span": "Dalit", "entity_type": "caste"}],
+      "detectable_by": ["ner"]
+    },
+    {
+      "id": "tc_013",
+      "text": "The patient is a Muslim from Kerala, admitted for cardiac surgery.",
+      "expected": [{"text_span": "Muslim", "entity_type": "religion"}],
+      "detectable_by": ["ner"]
+    },
+    {
+      "id": "tc_014",
+      "text": "Rahul Gupta from TCS was placed at the client site in Bangalore.",
+      "expected": [
+        {"text_span": "Rahul Gupta", "entity_type": "employee name"},
+        {"text_span": "TCS", "entity_type": "company name"}
+      ],
+      "detectable_by": ["ner"]
+    },
+    {
+      "id": "tc_015",
+      "text": "The patient presented with severe hypertension and Type 1 Diabetes.",
+      "expected": [
+        {"text_span": "severe hypertension", "entity_type": "medical condition"},
+        {"text_span": "Type 1 Diabetes", "entity_type": "medical condition"}
+      ],
+      "detectable_by": ["ner"]
+    },
+    {
+      "id": "tc_016",
+      "text": "Before I leave next month I will copy the client database to my personal drive.",
+      "expected": [{"text_span": "Before I leave next month I will copy the client database to my personal drive", "entity_type": "insider_risk"}],
+      "detectable_by": ["llm"]
+    },
+    {
+      "id": "tc_017",
+      "text": "The only female engineer on the Bangalore team who resigned last Tuesday took the source code.",
+      "expected": [{"text_span": "The only female engineer on the Bangalore team who resigned last Tuesday", "entity_type": "implied_identity"}],
+      "detectable_by": ["llm"]
+    },
+    {
+      "id": "tc_018",
+      "text": "Patient in bed 7 with the rare neurological condition was discharged without family consent.",
+      "expected": [{"text_span": "Patient in bed 7 with the rare neurological condition", "entity_type": "contextual_PHI"}],
+      "detectable_by": ["llm"]
+    },
+    {
+      "id": "tc_019",
+      "text": "We are acquiring XYZ Fintech before the announcement next quarter. Keep this confidential.",
+      "expected": [{"text_span": "acquiring XYZ Fintech before the announcement next quarter", "entity_type": "business_secret"}],
+      "detectable_by": ["llm"]
+    },
+    {
+      "id": "tc_020",
+      "text": "The senior developer who refused to sign the NDA last week has been accessing production after hours.",
+      "expected": [{"text_span": "senior developer who refused to sign the NDA last week has been accessing production after hours", "entity_type": "insider_risk"}],
+      "detectable_by": ["llm"]
+    },
+    {
+      "id": "tc_021",
+      "text": "The only doctor who treated the HIV patient last Tuesday is Dr. Mehta.",
+      "expected": [{"text_span": "only doctor who treated the HIV patient last Tuesday", "entity_type": "implied_identity"}],
+      "detectable_by": ["llm"]
+    },
+    {
+      "id": "tc_022",
+      "text": "Before his contract ends next month, we suspect he may copy client data to an external drive.",
+      "expected": [{"text_span": "copy client data to an external drive", "entity_type": "insider_risk"}],
+      "detectable_by": ["llm"]
+    },
+    {
+      "id": "tc_023",
+      "text": "The nurse who resigned last Friday took a copy of patient records before leaving.",
+      "expected": [{"text_span": "nurse who resigned last Friday took a copy of patient records", "entity_type": "insider_risk"}],
+      "detectable_by": ["llm"]
+    },
+    {
+      "id": "tc_024",
+      "text": "The woman in the Koramangala office who was diagnosed with cancer last month.",
+      "expected": [{"text_span": "woman in the Koramangala office who was diagnosed with cancer last month", "entity_type": "contextual_PHI"}],
+      "detectable_by": ["llm"]
+    },
+    {
+      "id": "tc_025",
+      "text": "We are planning a merger with ABC Corp before the board meeting next week.",
+      "expected": [{"text_span": "merger with ABC Corp before the board meeting next week", "entity_type": "business_secret"}],
+      "detectable_by": ["llm"]
+    }
+  ]

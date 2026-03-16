@@ -1,0 +1,45 @@
+[
+  {
+    "layer": "regex",
+    "test_cases": 7,
+    "tp": 10,
+    "fp": 0,
+    "fn": 0,
+    "precision": 100.0,
+    "recall": 100.0,
+    "f1": 100.0,
+    "missed": []
+  },
+  {
+    "layer": "ner",
+    "test_cases": 8,
+    "tp": 15,
+    "fp": 6,
+    "fn": 0,
+    "precision": 71.4,
+    "recall": 100.0,
+    "f1": 83.3,
+    "missed": []
+  },
+  {
+    "layer": "llm",
+    "test_cases": 10,
+    "tp": 10,
+    "fp": 1,
+    "fn": 0,
+    "precision": 90.9,
+    "recall": 100.0,
+    "f1": 95.2,
+    "missed": []
+  },
+  {
+    "layer": "full pipeline",
+    "test_cases": 25,
+    "tp": 35,
+    "fp": 0,
+    "fn": 0,
+    "precision": 100.0,
+    "recall": 100.0,
+    "f1": 100.0
+  }
+]
